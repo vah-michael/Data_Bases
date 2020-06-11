@@ -102,6 +102,13 @@ where
 DATE_FORMAT(birthday_at,'%m') = '05' or DATE_FORMAT(birthday_at,'%m') = '08';
 
 
+-- задание 5
+
+select * from catalogs
+where id in (5, 1, 2) order by field(id, 5, 1, 2) ;
+
+
+
 -- ------------------
 -- агрегация данных
 
@@ -134,8 +141,8 @@ from
 group by day_week;
  
 
-
-
-
-
-
+-- задание 3
+select 
+	-- id
+	exp(sum(ln(id))) as product_numbers
+from catalogs;
