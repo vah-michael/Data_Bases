@@ -72,4 +72,60 @@ select
 
 -- задание 5
 
+select distinct total_user, percent_activity from(	
+-- процент активности каждого пользователя в Posts
+(select distinct 
+	user_id as total_user,
+	(select ((
+		select count(*) as activity from posts where total_user = user_id group by user_id order by user_id
+		) / (
+		select count(*) from posts
+		) * 100)) as percent_activity
+from
+posts 
+order by percent_activity)
+
+union 
+
+-- процент активности каждого пользователя Messages (исходящие)
+(select distinct 
+	from_user_id as total_user,
+	(select ((
+		select count(*) as activity from messages where total_user = from_user_id group by from_user_id order by from_user_id
+		) / (
+		select count(*) from messages
+		) * 100)) as percent_activity
+from
+messages
+order by percent_activity)
+
+union 
+
+-- процент активности каждого пользователя Media
+(select distinct 
+	user_id as total_user,
+	(select ((
+		select count(*) as activity from messages where total_user = user_id group by user_id order by user_id
+		) / (
+		select count(*) from media
+		) * 100)) as percent_activity
+from
+media
+order by percent_activity)
+
+union 
+
+-- процент активности каждого пользователя Messages (входящие)
+(select distinct 
+	to_user_id as total_user,
+	(select ((
+		select count(*) as activity from messages where total_user = to_user_id group by to_user_id order by to_user_id
+		) / (
+		select count(*) from messages
+		) * 100)) as percent_activity
+from
+messages
+order by percent_activity)) as total_tabl group by total_user order by percent_activity limit 1;
+
+-- и т.д. (можно добавлять и другие статьи активности)
 
